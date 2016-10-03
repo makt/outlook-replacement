@@ -1,6 +1,7 @@
 #!/bin/sh
 iconv -f $1 -t utf8 |
-perl -pe '
+perl -p -0777 -e '
+ s,</p>\n*<p dir="ltr">,<br>,g;
  s,<o:p>.*?</o:p>,,g' |
 sed -r '
  s,</p><p class=.?MsoPlainText.?>,<br>,g
