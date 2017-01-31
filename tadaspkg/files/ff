@@ -1,0 +1,3 @@
+#!/bin/bash
+# pipe html email in mutt by typing "| ff"
+cat | viewhtmlmail /dev/stdin
