@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/env python2.7
 
 # Take an mbox HTML message (e.g. from mutt), split it
 # and rewrite it so it can be viewed in an external browser.
@@ -83,7 +83,6 @@ def view_html_message(f, tmpdir):
                 counter += 1
                 filename = "%s-%d%s" % (orig_basename, counter, orig_ext)
         filenames.add(filename)
-        filename = os.path.join(tmpdir, filename)
 
         # print "%10s %5s %s" % (part.get_content_type(), ext, filename)
 
@@ -102,7 +101,7 @@ def view_html_message(f, tmpdir):
                 subfiles.append({ 'filename': filename,
                                   'Content-Id': content_id })
                 counter += 1
-                fp = open(filename, 'wb')
+                fp = open(os.path.join(tmpdir, filename), 'wb')
                 fp.write(part.get_payload(decode=True))
                 # print "wrote", os.path.join(tmpdir, filename)
                 fp.close()
@@ -123,7 +122,7 @@ def view_html_message(f, tmpdir):
     # Substitute all the filenames for CIDs:
     for sf in subfiles:
         htmlsrc = re.sub('cid: ?' + sf['Content-Id'],
-                         'file://' + sf['filename'],
+                         sf['filename'],
                          htmlsrc, flags=re.IGNORECASE)
 
     fp.write(htmlsrc)
@@ -139,6 +138,8 @@ def view_html_message(f, tmpdir):
     # shutil.rmtree(tmpdir)
 
 if __name__ == '__main__':
-    tmpdir = tempfile.mkdtemp()
+    tmpdir=os.path.expandvars("${HOME}/.d/ff/")
+    shutil.rmtree(tmpdir)
+    os.mkdir(tmpdir)
     for f in sys.argv[1:]:
         view_html_message(f, tmpdir)
