@@ -9,11 +9,11 @@ rm -rf $builddir $tsprefix
 mkdir -p $builddir
 cd $builddir
 
-xzcat ~/pkgsrc/pkgsrc-dist/$rel/pkgsrc.tar.xz | tar -x --strip-components=1
+xzcat ~/pkgsrc/dist/$rel/pkgsrc.tar.xz | tar -x --strip-components=1
 cd bootstrap
 env -i CFLAGS="-U_FORTIFY_SOURCE" ./bootstrap --prefer-pkgsrc yes --make-jobs=10 --unprivileged --prefix=$tsprefix
 
-cp -a ~/pkgsrc/pkgsrc-dist/mk.conf $tsprefix/etc/mk.conf
+cp -a ~/pkgsrc/build/mk.conf $tsprefix/etc/mk.conf
 sed -i 's,$tsprefix,'"$tsprefix,g" $tsprefix/etc/mk.conf
 
 cd $builddir/lang/gcc48
