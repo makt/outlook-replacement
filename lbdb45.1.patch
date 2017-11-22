@@ -1,0 +1,180 @@
+diff --git a/old/Makefile b/lbdb/Makefile
+index 92b217d..ed4cad0 100644
+--- a/old/Makefile
++++ b/lbdb/Makefile
+@@ -1,6 +1,6 @@
+ # $NetBSD: Makefile,v 1.32 2016/07/09 06:37:59 wiz Exp $
+ 
+-DISTNAME=		lbdb_0.35.1
++DISTNAME=		lbdb_0.45.1
+ PKGNAME=		${DISTNAME:S/_/-/}
+ PKGREVISION=		5
+ CATEGORIES=		databases
+@@ -36,14 +36,14 @@ CONF_FILES+=		${EGDIR}/lbdb.rc ${PKG_SYSCONFDIR}/lbdb.rc
+ CONF_FILES+=		${EGDIR}/lbdb_ldap.rc ${PKG_SYSCONFDIR}/lbdb_ldap.rc
+ 
+ PLIST_VARS+=		finger
+-.if ${OPSYS} != "SunOS" || exists(/usr/bin/finger)
+-PLIST.finger=		yes
+-.endif
+-
++#.if ${OPSYS} != "SunOS" || exists(/usr/bin/finger)
++#PLIST.finger=		yes
++#.endif
++#
+ PLIST_VARS+=		yp
+-.if ${OPSYS} != "Interix"
+-PLIST.yp=		yes
+-.endif
++#.if ${OPSYS} != "Interix"
++#PLIST.yp=		yes
++#.endif
+ 
+ INSTALL_MAKE_FLAGS+=	install_prefix=${DESTDIR}
+ 
+diff --git a/old/PLIST b/lbdb/PLIST
+index 3ef2019..d5e319a 100644
+--- a/old/PLIST
++++ b/lbdb/PLIST
+@@ -22,7 +22,6 @@ libexec/lbdb/m_pine
+ libexec/lbdb/m_wanderlust
+ ${PLIST.yp}libexec/lbdb/m_yppasswd
+ libexec/lbdb/munge
+-libexec/lbdb/munge-keeporder
+ libexec/lbdb/mutt_ldap_query
+ libexec/lbdb/palm_lsaddr
+ libexec/lbdb/qpto8bit
+diff --git a/old/distinfo b/lbdb/distinfo
+index 59e9fb6..4ef4dd8 100644
+--- a/old/distinfo
++++ b/lbdb/distinfo
+@@ -1,9 +1,8 @@
+ $NetBSD: distinfo,v 1.13 2015/11/03 01:56:13 agc Exp $
+ 
+-SHA1 (lbdb_0.35.1.tar.gz) = 33c7767b248cc4289894e0a4b07ed55142484ecc
+-RMD160 (lbdb_0.35.1.tar.gz) = 1c202c532db93f3dec066b762f75a28e37d01d1a
+-SHA512 (lbdb_0.35.1.tar.gz) = 36788000977004fde45b9193c06a53eac88593de3a0817eb00b635ee9a980eebd29d5f2a23e083fda9c9e2e9db6ccc00d0abb8977f4e51a5955cda53c744c539
+-Size (lbdb_0.35.1.tar.gz) = 108502 bytes
+-SHA1 (patch-aa) = c74a4d95037e9d5e5cc0742e5f05ef80a35db5e6
+-SHA1 (patch-ab) = 7120edcd8588f2195b5c1afbb127245b182eb533
+-SHA1 (patch-mutt__ldap__query.pl.in) = f7e4fd16edac8dab9971af453caf14414d39493c
++SHA1 (lbdb_0.45.1.tar.gz) = 35326b0f75187252c266e88618072c7a5d3674c2
++RMD160 (lbdb_0.45.1.tar.gz) = d419af3701776d829898e4575ed489df47f48128
++SHA512 (lbdb_0.45.1.tar.gz) = 6063782d6b4f220ea92f5a40762379589241c977b476b7cbfdb147728521d3573b77b2331b3d7a45cff96d8d5ca47c8c88e0890bf7180696df00cf36284b3f86
++Size (lbdb_0.45.1.tar.gz) = 159214 bytes
++SHA1 (patch-aa) = 5d6d39dfb382b8b0e7ca9da25fdfa00ef3192dc2
++SHA1 (patch-ab) = 6123c0058e56e4836ee0f80fcad76a0e8ebf682f
+diff --git a/old/patches/patch-aa b/lbdb/patches/patch-aa
+index b25677f..e46b106 100644
+--- a/old/patches/patch-aa
++++ b/lbdb/patches/patch-aa
+@@ -1,16 +1,16 @@
+ $NetBSD: patch-aa,v 1.4 2005/11/12 17:43:42 tonio Exp $
+ 
+---- Makefile.in.orig	2005-10-29 16:48:08.000000000 +0200
++--- Makefile.in.orig	2017-11-06 12:37:17.000000000 +0000
+ +++ Makefile.in
+-@@ -39,6 +39,7 @@ srcdir=@srcdir@
++@@ -38,6 +38,7 @@ srcdir=@srcdir@
+  libdir=@libdir@
+  mandir=@mandir@
+  sysconfdir=@sysconfdir@
+ +egdir=@prefix@/share/examples/lbdb
+  
+  ALL=lbdbq lbdb_lib lbdb-fetchaddr lbdb-munge fetchaddr qpto8bit munge \
+- 	munge-keeporder	nodelist2lbdb palm_lsaddr mutt_ldap_query lbdbq.man \
+-@@ -50,7 +51,7 @@ all: Makefile $(ALL)
++ 	nodelist2lbdb palm_lsaddr mutt_ldap_query lbdbq.man \
++@@ -49,7 +50,7 @@ all: Makefile $(ALL)
+  install: all
+  	$(srcdir)/mkinstalldirs $(install_prefix)$(bindir)
+  	$(srcdir)/mkinstalldirs $(install_prefix)$(libdir)
+@@ -19,7 +19,7 @@ $NetBSD: patch-aa,v 1.4 2005/11/12 17:43:42 tonio Exp $
+  	$(srcdir)/mkinstalldirs $(install_prefix)$(mandir)
+  	$(srcdir)/mkinstalldirs $(install_prefix)$(mandir)/man1
+  	$(INSTALL) -m 755 fetchaddr $(install_prefix)$(libdir)
+-@@ -71,7 +72,7 @@ install: all
++@@ -69,7 +70,7 @@ install: all
+  		$(INSTALL) -m 644 mutt_ldap_query.man \
+  			$(install_prefix)$(mandir)/man1/mutt_ldap_query.1; \
+  		$(INSTALL) -m 644 lbdb_ldap.rc \
+@@ -27,8 +27,8 @@ $NetBSD: patch-aa,v 1.4 2005/11/12 17:43:42 tonio Exp $
+ +			$(install_prefix)$(egdir)/lbdb_ldap.rc; \
+  	fi
+  	if [ "$(XCODEBUILD)" != "no" -o "$(PBXBUILD)" != "no" ]; then \
+- 		$(INSTALL) -m 755 ABQuery/sym/ABQuery $(install_prefix)$(libdir); \
+-@@ -85,7 +86,7 @@ install: all
++ 		$(INSTALL) -m 755 ABQuery $(install_prefix)$(libdir); \
++@@ -83,7 +84,7 @@ install: all
+  	$(INSTALL) -m 644 lbdbq.man $(install_prefix)$(mandir)/man1/lbdbq.1
+  	$(INSTALL) -m 644 lbdb-fetchaddr.man \
+  		$(install_prefix)$(mandir)/man1/lbdb-fetchaddr.1
+diff --git a/old/patches/patch-ab b/lbdb/patches/patch-ab
+index 5964837..7b7f9ee 100644
+--- a/old/patches/patch-ab
++++ b/lbdb/patches/patch-ab
+@@ -1,8 +1,8 @@
+ $NetBSD: patch-ab,v 1.4 2005/11/12 18:06:43 tonio Exp $
+ 
+---- configure.orig	2005-10-29 14:49:48.000000000 +0200
++--- configure.orig	2017-11-06 12:37:17.000000000 +0000
+ +++ configure
+-@@ -3294,18 +3294,7 @@ if test "x$AWK" != "xNONE" ; then
++@@ -4849,18 +4849,7 @@ if test "x$AWK" != "xNONE" ; then
+  	AWK="$AWK"
+  fi
+  
+@@ -22,7 +22,7 @@ $NetBSD: patch-ab,v 1.4 2005/11/12 18:06:43 tonio Exp $
+  
+  
+  # Extract the first word of "tac", so it can be a program name with args.
+-@@ -4604,6 +4593,12 @@ if test "x$PERL" != xno ; then
++@@ -6379,6 +6368,12 @@ if test "x$PERL" != xno ; then
+  
+  fi
+  
+@@ -35,7 +35,7 @@ $NetBSD: patch-ab,v 1.4 2005/11/12 18:06:43 tonio Exp $
+  # m_osx_addressbook requires xcode (10.3) or projectbuilder (<10.3)
+  # Extract the first word of "xcodebuild", so it can be a program name with args.
+  set dummy xcodebuild; ac_word=$2
+-@@ -4694,6 +4689,11 @@ fi
++@@ -6471,6 +6466,11 @@ fi
+  
+  	fi
+  fi
+@@ -46,10 +46,10 @@ $NetBSD: patch-ab,v 1.4 2005/11/12 18:06:43 tonio Exp $
+ +withval=""
+  
+  VFORMAT="no"
+- if test "${ac_cv_header_vf_iface_h+set}" = set; then
+-@@ -4899,8 +4899,8 @@ echo "$as_me:$LINENO: result: $ac_cv_lib
+- echo "${ECHO_T}$ac_cv_lib_vformat_vf_read_file" >&6
+- if test $ac_cv_lib_vformat_vf_read_file = yes; then
++ ac_fn_c_check_header_mongrel "$LINENO" "vf_iface.h" "ac_cv_header_vf_iface_h" "$ac_includes_default"
++@@ -6514,8 +6514,8 @@ fi
++ $as_echo "$ac_cv_lib_vformat_vf_read_file" >&6; }
++ if test "x$ac_cv_lib_vformat_vf_read_file" = xyes; then :
+  
+ -    MODULES="$MODULES m_vcf"
+ -    VFORMAT="yes"
+diff --git a/old/patches/patch-mutt__ldap__query.pl.in b/old/patches/patch-mutt__ldap__query.pl.in
+deleted file mode 100644
+index ae542c5..0000000
+--- a/old/patches/patch-mutt__ldap__query.pl.in
++++ /dev/null
+@@ -1,15 +0,0 @@
+-$NetBSD: patch-mutt__ldap__query.pl.in,v 1.1 2013/06/14 18:30:43 dholland Exp $
+-
+-Fix bug in man page noted by perl-5.18's pod2man.
+-
+---- mutt_ldap_query.pl.in.orig	2013-06-12 12:13:03.000000000 +0000
+-+++ mutt_ldap_query.pl.in
+-@@ -539,6 +539,8 @@ multiple searches for email addresses ba
+- just like this one 8-)
+-  http://www.spinnaker.de/lbdb/
+- 
+-+=back
+-+
+- =head1 AUTHORS
+- 
+- Marc de Courville <marc@courville.org> and the various other contributors... that kindly sent their patches.
