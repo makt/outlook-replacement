@@ -92,6 +92,10 @@ cd $builddir/databases/lbdb
 git apply -p2 $pwd/lbdb45.1.patch
 bmake install
 
+cd $builddir/pkgtools/pkg_alternatives
+bmake install
+pkg_alternatives manual python36
+
 sed -i "s,/usr/bin/mutt,$tsprefix/bin/mutt," $tsprefix/bin/url_handler.sh
 sed -i '/SURFRAW_duckduckgo_base_url/s,www.,,; s/kd=1/kd=-1/' $tsprefix/lib/surfraw/duckduckgo
 if [ ! -f $tsprefix/etc/openssl/certs/ca-certificates.crt ]; then
