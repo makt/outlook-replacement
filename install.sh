@@ -85,6 +85,9 @@ bmake install
 cd $builddir/textproc/html2text
 bmake install
 
+cd $builddir/converters/docx2txt
+bmake install
+
 #cd $builddir/archivers/p7zip
 #bmake install
 
