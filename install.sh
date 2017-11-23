@@ -117,5 +117,9 @@ fi
 
 pip install xlsx2csv
 
+cp -a $pwd/tadaspkg $builddir/devel
+cd $builddir/devel/tadaspkg
+bmake install
+
 echo -e '\a' done haha
 # ./pkg_info -u - list user installed packages (manually selected, not deps)

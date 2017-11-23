@@ -1,0 +1,7 @@
+@comment $NetBSD $
+bin/ff
+bin/htmlfixups.sh
+bin/mutt-ics
+bin/pptx2txt.sh
+bin/viewhtmlmail
+bin/viewmailattachments
