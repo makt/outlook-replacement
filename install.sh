@@ -82,6 +82,9 @@ bmake install
 cd $builddir/www/surfraw
 bmake install
 
+cd $builddir/textproc/html2text
+bmake install
+
 #cd $builddir/archivers/p7zip
 #bmake install
 
