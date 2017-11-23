@@ -105,5 +105,7 @@ if [ ! -f $tsprefix/etc/openssl/certs/ca-certificates.crt ]; then
  mozilla-rootcerts install
 fi
 
+pip install xlsx2csv
+
 echo -e '\a' done haha
 # ./pkg_info -u - list user installed packages (manually selected, not deps)
