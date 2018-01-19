@@ -4,7 +4,7 @@ set -euo pipefail
 . ~/.tadasenv
 rel=$1
 pwd=$PWD
-export tsprefix=${HOME}/pkgsrc/root.$rel
+export tsprefix=${HOME}/.pkgsrc/root.$rel
 export MANPATH=$tsprefix/man:$MANPATH
 export PATH=$tsprefix/bin:$tsprefix/sbin:/usr/bin:/bin:/usr/sbin:/sbin
 
@@ -14,15 +14,15 @@ mkdir -p $builddir
 cd $builddir
 if [ ! -f /usr/bin/gcc ]; then
  export PATH=$PATH:$builddir/gcc48/bin
- xzcat ~/pkgsrc/dist/gcc48el5.tar.xz | tar -x
+ xzcat ~/.pkgsrc/dist/gcc48el5.tar.xz | tar -x
 fi
 
-xzcat ~/pkgsrc/dist/$rel/pkgsrc.tar.xz | tar -x --strip-components=1
+xzcat ~/.pkgsrc/dist/$rel/pkgsrc.tar.xz | tar -x --strip-components=1
 cd bootstrap
 CFLAGS="-U_FORTIFY_SOURCE" ./bootstrap --prefer-pkgsrc yes --make-jobs=10 --unprivileged --prefix=$tsprefix
 
 cp -a $pwd/mk.conf $tsprefix/etc/mk.conf
-sed -i 's,$tsprefix,'"$tsprefix,g" $tsprefix/etc/mk.conf
+sed -i 's,$tsprefix,'"$tsprefix"',g; s,$pwd,'"$pwd,g" $tsprefix/etc/mk.conf
 
 cd $builddir/lang/gcc48
 bmake install
