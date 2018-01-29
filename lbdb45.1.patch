@@ -19,7 +19,7 @@ index 92b217d..ed4cad0 100644
 -.endif
 -
 +#.if ${OPSYS} != "SunOS" || exists(/usr/bin/finger)
-+#PLIST.finger=		yes
++PLIST.finger=		no
 +#.endif
 +#
  PLIST_VARS+=		yp
@@ -27,7 +27,7 @@ index 92b217d..ed4cad0 100644
 -PLIST.yp=		yes
 -.endif
 +#.if ${OPSYS} != "Interix"
-+#PLIST.yp=		yes
++PLIST.yp=		no
 +#.endif
  
  INSTALL_MAKE_FLAGS+=	install_prefix=${DESTDIR}
