@@ -77,10 +77,13 @@ bmake install
 cd $builddir/mail/getmail
 bmake install
 
+cd $builddir/security/gpgme
+git apply -p2 $pwd/gpgme.patch
 cd $builddir/mail/mutt
 bmake install
 
 cd $builddir/mail/notmuch
+git apply -p2 $pwd/notmuch.patch
 bmake install
 
 cd $builddir/www/w3m

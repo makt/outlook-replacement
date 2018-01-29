@@ -1,0 +1,12 @@
+diff --git a/old/Makefile b/gpgme/Makefile
+index 2b2f1f5..601a9f1 100644
+--- a/old/Makefile
++++ b/gpgme/Makefile
+@@ -22,6 +22,7 @@ SUBST_FILES.pthread=	src/gpgme-config.in
+ SUBST_SED.pthread+=	-e 's,@PTHREAD_LIBS@,${PTHREAD_LDFLAGS} ${PTHREAD_LIBS},g'
+ SUBST_SED.pthread+=	-e 's,@PTHREAD_CFLAGS@,${PTHREAD_CFLAGS},g'
+ SUBST_STAGE.pthread=	post-patch
++CONFIGURE_ARGS+=        --disable-gpgsm-test
+ 
+ CPPFLAGS.Darwin=	-D_POSIX_C_SOURCE=200809L
+ LIBS.SunOS+=		-lnsl -lsocket
